@@ -29,9 +29,10 @@ pub trait FragmentService: P2pService {
     /// The type of asynchronous futures returned by method `content_subscription`.
     ///
     /// The future resolves to a stream of fragments sent by the remote node
-    /// and the identifier of the node in the network.
+    /// and the public identifier of the node in the network,
+    /// if provided by the peer.
     type FragmentSubscriptionFuture: Future<
-        Item = (Self::FragmentSubscription, Self::NodeId),
+        Item = (Self::FragmentSubscription, Option<Self::NodeId>),
         Error = Error,
     >;
 

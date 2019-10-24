@@ -165,17 +165,18 @@ pub trait BlockService: P2pService {
 
     /// Establishes a bidirectional subscription for announcing blocks.
     ///
-    /// The network protocol implementation passes the node identifier of
-    /// the sender and an asynchronous stream that will provide the inbound
-    /// announcements.
+    /// The network protocol implementation passes an asynchronous stream
+    /// that will provide the inbound announcements, and an optional
+    /// node identifier of the sender that can be correlated with the
+    /// gossip information to reuse the connection.
     ///
     /// Returns a future resolving to an asynchronous stream
     /// that will be used by this node to send block announcements
     /// and solicitations.
     fn block_subscription<In>(
         &mut self,
-        subscriber: Self::NodeId,
         inbound: In,
+        subscriber: Option<Self::NodeId>,
     ) -> Self::BlockSubscriptionFuture
     where
         In: Stream<Item = Self::Header, Error = Error> + Send + 'static;

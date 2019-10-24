@@ -314,15 +314,12 @@ where
     }
 }
 
-pub fn decode_node_id<Id>(metadata: &MetadataMap) -> Result<Id, core_error::Error>
+pub fn decode_node_id<Id>(metadata: &MetadataMap) -> Result<Option<Id>, core_error::Error>
 where
     Id: NodeId + property::Deserialize,
 {
     match metadata.get_bin(NODE_ID_HEADER) {
-        None => Err(core_error::Error::new(
-            core_error::Code::InvalidArgument,
-            format!("missing metadata {}", NODE_ID_HEADER),
-        )),
+        None => Ok(None),
         Some(val) => {
             let val = val.to_bytes().map_err(|e| {
                 core_error::Error::new(
@@ -336,7 +333,7 @@ where
                     format!("invalid node ID in {}: {}", NODE_ID_HEADER, e),
                 )
             })?;
-            Ok(id)
+            Ok(Some(id))
         }
     }
 }

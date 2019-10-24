@@ -44,16 +44,17 @@ pub trait FragmentService: P2pService {
 
     /// Establishes a bidirectional subscription for announcing new fragments.
     ///
-    /// The network protocol implementation passes the node identifier of
-    /// the sender and an asynchronous stream that will provide the inbound
-    /// announcements.
+    /// The network protocol implementation passes an asynchronous stream
+    /// that will provide the inbound announcements, and an optional
+    /// node identifier of the sender that can be correlated with the
+    /// gossip information to reuse the connection.
     ///
     /// Returns a future resolving to an asynchronous stream
     /// that will be used by this node to send fragment announcements.
     fn fragment_subscription<In>(
         &mut self,
-        subscriber: Self::NodeId,
         inbound: In,
+        subscriber: Option<Self::NodeId>,
     ) -> Self::FragmentSubscriptionFuture
     where
         In: Stream<Item = Self::Fragment, Error = Error> + Send + 'static;

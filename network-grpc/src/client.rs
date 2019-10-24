@@ -241,7 +241,7 @@ where
     R: prost::Message + Default,
     Id: NodeId + property::Deserialize,
 {
-    type Item = (ResponseStream<T, R>, Id);
+    type Item = (ResponseStream<T, R>, Option<Id>);
     type Error = core_error::Error;
 
     fn poll(&mut self) -> Poll<Self::Item, core_error::Error> {
@@ -317,11 +317,6 @@ where
         let mut req = Request::new(rs);
         if let Some(ref id) = self.node_id {
             encode_node_id(id, req.metadata_mut()).unwrap();
-        } else {
-            // In the current server-side implementation, the request
-            // will be rejected as invalid without the node ID.
-            // It makes the code simpler to try regardless, and there may
-            // eventually be permissive node implementations.
         }
         req
     }

@@ -16,9 +16,10 @@ pub trait GossipService: P2pService {
     /// The type of asynchronous futures returned by method `gossip_subscription`.
     ///
     /// The future resolves to a stream of gossip messages sent by the remote node
-    /// and the identifier of the node in the network.
+    /// and the public identifier of the node in the network,
+    /// if provided by the peer.
     type GossipSubscriptionFuture: Future<
-        Item = (Self::GossipSubscription, Self::NodeId),
+        Item = (Self::GossipSubscription, Option<Self::NodeId>),
         Error = Error,
     >;
 

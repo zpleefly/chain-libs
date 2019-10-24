@@ -120,9 +120,10 @@ pub trait BlockService: P2pService {
     /// The type of asynchronous futures returned by method `block_subscription`.
     ///
     /// The future resolves to a stream of blocks sent by the remote node
-    /// and the identifier of the node in the network.
+    /// and the public identifier of the node in the network,
+    /// if provided by the peer.
     type BlockSubscriptionFuture: Future<
-        Item = (Self::BlockSubscription, Self::NodeId),
+        Item = (Self::BlockSubscription, Option<Self::NodeId>),
         Error = Error,
     >;
 

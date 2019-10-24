@@ -27,16 +27,17 @@ pub trait GossipService: P2pService {
 
     /// Establishes a bidirectional subscription for node gossip messages.
     ///
-    /// The network protocol implementation passes the node identifier of
-    /// the sender and an asynchronous stream that will provide the inbound
-    /// announcements.
+    /// The network protocol implementation passes an asynchronous stream
+    /// that will provide the inbound announcements, and an optional
+    /// node identifier of the sender that can be correlated with the
+    /// gossip information to reuse the connection.
     ///
     /// Returns a future resolving to an asynchronous stream
     /// that will be used by this node to send node gossip messages.
     fn gossip_subscription<In>(
         &mut self,
-        subscriber: Self::NodeId,
         inbound: In,
+        subscriber: Option<Self::NodeId>,
     ) -> Self::GossipSubscriptionFuture
     where
         In: Stream<Item = Gossip<Self::Node>, Error = Error> + Send + 'static;
