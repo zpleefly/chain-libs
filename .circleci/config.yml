@@ -113,9 +113,9 @@ workflows:
   test_all:
     jobs:
       - cargo_fetch
-      - cargo_audit:
-          requires:
-            - cargo_fetch
+      #- cargo_audit:
+      #    requires:
+      #      - cargo_fetch
       - test_debug:
           requires:
             - cargo_fetch
